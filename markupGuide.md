@@ -1,6 +1,6 @@
 # 마크업이 전달되는 과정 소개하기
 
-    마크업 개발이 어떻게 진행 되는지 알아보는 시간이 되었으면 한다.
+    마크업 개발이 어떻게 진행되는지 알아보는 시간이 되었으면 한다.
 
 ## 네이버 '회원서비스' 업무 프로세스
 
@@ -204,4 +204,3 @@ n-wax : http://nuli.navercorp.com/sharing/fe/nwax
 
  - 마크업 가이드 공유
  http://gitlab2.uit.nhncorp.com/nid/naverid/issues/11
- 
