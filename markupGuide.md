@@ -1,6 +1,6 @@
 # 마크업이 전달되는 과정 소개하기
 
-    이번 스터디를 통해서 마크업 개발이 어떻게 진행되는지 간략하게 살펴보는 시간을 갖도록 하겠습니다.
+    마크업 개발이 어떻게 진행 되는지 알아보는 시간이 되었으면 한다.
 
 ## 네이버 '회원서비스' 업무 프로세스
 
@@ -21,8 +21,12 @@
 - url :<br>
     http://gitlab2.uit.nhncorp.com/nid/naverid/issues/11<br>
     http://view.gitlab2.uit.nhncorp.com/nid/naverid/raw/feature/global-login/src/join/desktop/01_global_certification.html
-- 기존 pc/table & mobile 두벌의 마크업 파일로 전달
-- 반응형 웹 적용 (pc/ tablet/ mobile) 하나의 마크업 파일로 전달
+- 기존 : pc/table, mobile 두개의 html파일과 각각의 환경을 대응하는 3개의 css파일로 구현
+- 신규 : 반응형 웹 (Responsive Web) 구현 <br>
+  미디어 쿼리를 적용하여 css 코드를 분기 처리함으로써 하나의 html 소스가 여러가지 뷰(pc,tablet,mobile)를 갖도록 구현
+
+  ![](img/img_viewport.png)
+
 
 ## 마크업 개발이 진행되는 과정 소개
 
@@ -33,19 +37,19 @@
 1. 시맨틱한 마크업 구조 설계 (HTML 문서 작성) :<br>
  HTML태그를 통해서 정보를 구조화한다. 디자인이 적용되지 않은 상태이며, 가장 기초적인 골격의 형태로 내용의 선형성을 유지하고 의미론적으로 작성되며 접근성이 확보될 수 있도록 작성되어야 한다.
 
-    -DTD(Document type definition) 선언
+  - DTD(Document type definition) 선언
 
     ``` html
     <!DOCTYPE html>
     ```
 
-    -주언어 lang="" 속성 명시
+  - 주언어 lang="" 속성 명시
 
     ``` html
     <html lang="ko">
     ```     
 
-    -head 태그 안에는 문서의 제목, 스타일 시트 링크, 문서의일반적 정보(metadata) 제공
+  - head 태그 안에는 문서의 제목, 스타일 시트 링크, 문서의일반적 정보(metadata) 제공
 
     ``` html
     <html lang="ko">
@@ -62,7 +66,7 @@
     </body>Â
     </html>
     ```       
-     ** 뷰포트(Viewport)란?<br>
+  * 뷰포트(Viewport)란?<br>
   웹 페이지가 표시되는 영역으로<br>
   뷰포트 메타태그를 이용하면 모바일 웹에 최적의 상태로 화면이 표시되도록 설정할 수 있다.
 
@@ -172,6 +176,7 @@
   </div>
 </body>
 ```  
+- HTML 구조 작성 단계로 css가 스타일링 되기 전단계
 ![](img/img_markup.png)<br><br>
 
 - 스타일 시트 설계 (CSS 문서 작성) : <br>
@@ -186,9 +191,17 @@ HTML 문서위에 css로 스타일링 하여 디자인 시안과 동일한 UI로
 - 웹접근성 테스트 n-wax 등등 테스트 : <br>
 n-wax : http://nuli.navercorp.com/sharing/fe/nwax
 
-- 검수 기준 브라우져, 모바일 기기에서 마크업 가이드의 화면과 디자인 가이드에 표기된 수치와 동일하게 노출되는지 테스트한다.
+- 디자인 픽셀 확인 <br>
+  검수 기준 브라우져,모바일 기기에서 마크업 가이드의 화면과 디자인 가이드에 표기된 수치와 동일하게 노출되는지 테스트한다.
 
-ex ) pc :  IE8 ~ IE11 (디자인 검수 브라우져 window IE 11)<br>
-           mobile : iPhone 5  (inspector or X코드 )<br>
-  -x-code<br>
+  ex ) pc :  IE8 ~ IE11 (검수 브라우져 window IE 11) /
+     mobile : iPhone 5 (Adobe Inspector or X-Code )<br>
+  - Adobe Inspector<br/>
+  http://www.adobe.com/products/edge-inspect.html
+
+  - X-Code<br>
   ![](img/x-code.png)<br><br>         
+
+ - 마크업 가이드 공유
+ http://gitlab2.uit.nhncorp.com/nid/naverid/issues/11
+ 
