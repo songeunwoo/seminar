@@ -438,7 +438,7 @@ HAR(HTTP Archive format) file과 proxy를 이용하여 진행이 가능하다.
 폰에서 HTTP프록시 설정하는 방법
 ![](assets/screen15.png)
 
-[charles](https://www.charlesproxy.com)
+[HTTP 패킷 확인 툴 찰스(charles)](https://www.charlesproxy.com)
 
 ## 오픈소스라 내 환경 이랑은 맞지 않아요.
 
