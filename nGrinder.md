@@ -19,7 +19,7 @@
 ## 많고 많은 성능 테스트중에 nGrinder인 이유는?
 
  * 오픈소스로 무료니까!
- * 대용량 분산 테스트가 가능 하니까!! (jmeter)
+ * 대용량 분산 테스트가 가능 하니까!!
  * 초딩도 할수 있을만큼 간단 하니까!!!
     - 한글, 영어, 중국어 지원
     - 간단한 UI
@@ -62,12 +62,12 @@ java -XX:MaxPermSize=200m -jar ngrinder-controller-3.4.war --port 9000 (-p 9000)
 
 ```
 
-## nGrinder 가지고 놀아볼까?
+## 이제 nGrinder 가지고 놀아볼까요?
 
-테스트 대상
+주 테스트 대상
 ![](assets/screen4.png)
 
-테스트 언어
+사용 가능한 테스트 언어
 ![](assets/screen3.png)
 
 
@@ -88,6 +88,7 @@ nGrinder Groovy 테스트에서는 기존에 많이 쓰이던 JUnit의 @BeforeCl
 [출처](https://github.com/naver/ngrinder/wiki/Groovy-Script-Structure)
 
 처음 작성하시는 분들을 위해 기본 템플릿을 제공해 드립니다.
+
 ![](assets/screen13.png)
 
 ```java
