@@ -436,13 +436,13 @@ HAR(HTTP Archive format) file과 proxy를 이용하여 진행이 가능하다.
 ![](assets/screen12.png)
 
 폰에서 HTTP프록시 설정하는 방법
-![](assets/screen14.png)
+![](assets/screen15.png)
 
 [charles](https://www.charlesproxy.com)
 
 ## 오픈소스라 내 환경 이랑은 맞지 않아요.
 
-  >nGrinder는 pf4j를 사용하여 사용자가 원하는 데로 plugin을 개발하여 사용 가능 합니다.
+  >nGrinder는 PF4J(Plugin Framework for Java)를 사용하여 사용자가 원하는 데로 plugin을 개발하여 사용 가능 합니다.
 
 [개발방법](https://github.com/naver/ngrinder/wiki/How-to-develop-plugin-pf4j-in-kr)
 
