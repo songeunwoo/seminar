@@ -140,7 +140,8 @@ Initialized empty Git repository in /Users/NAVER/.password-store/.git/
 
 ## 팀원과 공유하기
 
-![](assets/account-key.png)(출처: https://commons.wikimedia.org/wiki/File:Orange_blue_public_key_cryptography_en.svg)
+![](assets/account-key.png)<br/>
+(출처: https://commons.wikimedia.org/wiki/File:Orange_blue_public_key_cryptography_en.svg)
 
 pass는 여러 개의 gpg-id를 지원한다. 하나의 비밀번호를 여러 개의 공개 키로 동시에 암호화시킬 수 있다. 따라서 팀원 중 누군가가 새로운 비밀번호를 저장하면 pass는 팀원 전체의 공개 키들로 비밀번호를 암호화한다. 예를 들어 팀원이 10명이라면, 10개의 공개 키를 동시에 사용하여 새로 저장된 비밀번호를 암호화시킨다. 유의할 점은 서로 다른 공개 키로 암호화된 파일 10개가 따로 생기는 것이 아니라 10개의 공개 키를 한꺼번에 사용하여 암호화된 파일을 하나만 생성한다는 점이다. 저장한 비밀번호가 1개라면 팀원 수와는 상관없이 1개의 암호화된 파일만 생성된다. 이 암호화된 파일이 pass 디렉토리에 저장되며 git repository로 공유된다.
 
