@@ -142,16 +142,159 @@ Initialized empty Git repository in /Users/NAVER/.password-store/.git/
 
 ![](assets/account-key.png)(출처: https://commons.wikimedia.org/wiki/File:Orange_blue_public_key_cryptography_en.svg)
 
-블록체인
+pass는 여러 개의 gpg-id를 지원한다. 하나의 비밀번호를 여러 개의 공개 키로 동시에 암호화시킬 수 있다. 따라서 팀원 중 누군가가 새로운 비밀번호를 저장하면 pass는 팀원 전체의 공개 키들로 비밀번호를 암호화한다. 예를 들어 팀원이 10명이라면, 10개의 공개 키를 동시에 사용하여 새로 저장된 비밀번호를 암호화시킨다. 유의할 점은 서로 다른 공개 키로 암호화된 파일 10개가 따로 생기는 것이 아니라 10개의 공개 키를 한꺼번에 사용하여 암호화된 파일을 하나만 생성한다는 점이다. 저장한 비밀번호가 1개라면 팀원 수와는 상관없이 1개의 암호화된 파일만 생성된다. 이 암호화된 파일이 pass 디렉토리에 저장되며 git repository로 공유된다.
+
+암호화시킬 때 사용했던 공개 키와 짝을 이루는 비밀 키 중에서 하나만 있으면 비밀번호는 복호화 가능하다. gpg 키를 생성할 때 저장된 비밀 키는 오직 키를 생성한 주인만 가질 수 있다. 따라서 10명의 팀원 각각은 팀원 모두의 공개 키(10개)와 자기 자신의 비밀 키(1개)를 가지고 있어야 한다. 팀원 모두의 공개 키로 비밀번호를 암호화시키고, 비밀번호를 복호화할 때는 자신의 비밀 키를 사용한다.
+
+pass는 비밀번호를 암호화시키거나 복호화시킬 때 사용할 gpg-id를 ‘~/.password-store/.gpg-id’ 파일에 저장해둔다. 이 곳에 자신의 gpg-id가 없다면 그 팀원은 git repository를 복사할 수 있어도 비밀번호를 복호화시킬 수 없다. 즉, git repository가 해킹 당해도 gpg-id의 비밀 키를 모르면 저장된 비밀번호를 볼 수 없다.
+
+따라서 팀 전체가 사용하는 pass 계정은 팀원 모두의 gpg-id를 알고 있어야 한다. 또한 모든 팀원은 각 gpg-id의 공개 키를 ‘~/.gnupg/’에 저장하고 있어야 한다. 단순히 git repository를 복사해서 공유하는 것만으로는 비밀번호를 암호화하거나 다시 복호화시킬 수 없다.
 
 ### 공개 키 공유하기
 
+공개 키를 공유하는 방법에는 여러가지가 있지만, 키 서버를 사용하는 것이 가장 편합니다. 키 서버란 모든 사람들의 공개 키를 저장해둔 서버로 공개 키를 키 서버에 저장해두면, 특정 개인에게 암호화된 메세지를 보내고 싶을 때 서버에 저장된 키를 사용할 수 있으며 팀원 전체가 각자의 공개 키를 키 서버에 저장해두면 팀원 전체의 공유가 가능합니다.
+
+키 서버에 공유하기 전에 공유할 키의 gpg-id를 확인한다. ```--list-secret-keys``` 옵션을 사용하면 현재 저장되어 있는 비밀 키를 볼 수 있습니다.
+
+키서버로는 [MIT PGP Public Key Server](https://pgp.mit.edu/)를 활용하였습니다.
+
+```
+$ gpg2 --keyserver pgp.mit.edu --send-key 22C857138D5BEB460CF20DFFF68AB0160A5ACECF 80AC1D4A0503527C20885ECAE7CA659F6E2F49B0
+gpg: sending key F68AB0160A5ACECF to hkp://pgp.mit.edu
+gpg: sending key E7CA659F6E2F49B0 to hkp://pgp.mit.edu
+```
+
+모든 팀원은 자신의 gpg-id로 키를 키 서버에 공유해야 하며, 자신 외의 모든 팀원들의 키를 키 서버에서 공유받아야 합니다.
 
 ### 공개 키 가져오기
 
+동료의 키를 ```--recv-key``` 옵션을 사용하여 가져옵니다.
+
+```
+$ gpg2 --keyserver pgp.mit.edu --recv-key CE7D1949
+gpg: key 86C3CB05CE7D1949: public key "Oliver Erlenkämper (Privat) <oliver@erlenkaemper.de>" imported
+gpg: Total number processed: 1
+gpg:               imported: 1
+```
+
+가져온 키 확인은 ```gpg2 --list-keys``` 으로 가능 합니다.
+
+```
+$ gpg2 --list-keys
+/Users/NAVER/.gnupg/pubring.kbx
+-------------------------------
+pub   rsa2048 2017-05-08 [SC] [expires: 2019-05-08]
+      22C857138D5BEB460CF20DFFF68AB0160A5ACECF
+uid           [ultimate] pasta-test <pasta-test@naver.com>
+sub   rsa2048 2017-05-08 [E] [expires: 2019-05-08]
+
+pub   rsa2048 2017-05-08 [SC] [expires: 2019-05-08]
+      80AC1D4A0503527C20885ECAE7CA659F6E2F49B0
+uid           [ultimate] pastatest pasta-test2 <pasta-test2@naver.com>
+sub   rsa2048 2017-05-08 [E] [expires: 2019-05-08]
+
+pub   rsa2048 2013-05-10 [SCA] [expires: 2018-05-09]
+      A5E6F92540DD03C8ACF569D186C3CB05CE7D1949
+uid           [ unknown] Oliver Erlenkämper (Privat) <oliver@erlenkaemper.de>
+uid           [ unknown] Oliver Erlenkämper <oliver@erlenkaemper.de>
+uid           [ unknown] Oliver Erlenkämper <o.erlenkaemper@googlemail.com>
+uid           [ unknown] Oliver Erlenkämper <oerlenka@mail.uni-mannheim.de>
+uid           [ unknown] Oliver Erlenkämper (Privat) <o.erlenkaemper@googlemail.com>
+uid           [ unknown] Oliver Erlenkämper (Uni Mannheim) <erlenkaemper@uni-mannheim.de>
+uid           [ unknown] Oliver ErlenkÃ¤mper (Uni Mannheim) <erlenkaemper@uni-mannheim.de>
+uid           [ unknown] Oliver Erlenkämper (trans-index.net) <erlenkaemper@trans-index.net>
+uid           [ unknown] Oliver Erlenkämper (Uni Mannheim) <oliver.erlenkaemper@uni-mannheim.de>
+uid           [ unknown] Oliver Erlenkämper (Uni Mannheim Student) <oerlenka@mail.uni-mannheim.de>
+uid           [ unknown] Oliver Erlenkämper (Informatik Uni Mannheim) <erlenkaemper@informatik.uni-mannheim.de>
+uid           [ unknown] Oliver ErlenkÃ¤mper (Informatik Uni Mannheim) <erlenkaemper@informatik.uni-mannheim.de>
+uid           [ unknown] Oliver Erlenkämper (Informatik Uni Mannheim) <oliver.erlenkaemper@informatik.uni-mannheim.de>
+sub   rsa2048 2013-10-10 [E]
+sub   dsa2048 2013-10-10 [S]
+```
+
+가져온 키의 신뢰수준을 변경해야 사용이 가능합니다.
+
+```
+$ gpg2 --edit-key 52FFE2BBCAB37AE64AD3999EC08C4ECD036C031E
+gpg (GnuPG) 2.1.20; Copyright (C) 2017 Free Software Foundation, Inc.
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
+
+
+pub  rsa2048/C08C4ECD036C031E
+     created: 2013-04-08  expired: 2017-04-08  usage: SCEA
+     trust: unknown       validity: expired
+sub  rsa2048/C14FDB7E7CE774C4
+     created: 2013-04-08  expired: 2017-04-08  usage: SEA
+[ expired] (1). Travis Wolfrey <twolfrey@progress-index.com>
+
+gpg> trust
+pub  rsa2048/C08C4ECD036C031E
+     created: 2013-04-08  expired: 2017-04-08  usage: SCEA
+     trust: unknown       validity: expired
+sub  rsa2048/C14FDB7E7CE774C4
+     created: 2013-04-08  expired: 2017-04-08  usage: SEA
+[ expired] (1). Travis Wolfrey <twolfrey@progress-index.com>
+
+Please decide how far you trust this user to correctly verify other users' keys
+(by looking at passports, checking fingerprints from different sources, etc.)
+
+  1 = I don't know or won't say
+  2 = I do NOT trust
+  3 = I trust marginally
+  4 = I trust fully
+  5 = I trust ultimately
+  m = back to the main menu
+
+Your decision? 5
+Do you really want to set this key to ultimate trust? (y/N) y
+
+pub  rsa2048/C08C4ECD036C031E
+     created: 2013-04-08  expired: 2017-04-08  usage: SCEA
+     trust: ultimate      validity: expired
+sub  rsa2048/C14FDB7E7CE774C4
+     created: 2013-04-08  expired: 2017-04-08  usage: SEA
+[ expired] (1). Travis Wolfrey <twolfrey@progress-index.com>
+Please note that the shown key validity is not necessarily correct
+unless you restart the program.
+
+gpg> q
+```
 
 ### 새로운 동료와 공유하기
 
+새로운 팀원의 입장에서는 기존 팀원 중 누군가가 자신의 gpg-id를 pass에 포함시켜 주어야 합니다.
+
+```
+$ pass init BD699A08 D83EB3C5
+
+Password store initialized for BD699A08, D83EB3C5
+
+[master 0f2f059] Set GPG id to BD699A08, D83EB3C5.
+ 1 file changed, 1 insertion(+)
+
+ci-tool: reencrypting to C7505C45A9CD6AD3 D4F57D4EE716C901
+email/jngsp@test.com: reencrypting to C7505C45A9CD6AD3 D4F57D4EE716C901
+heroku-for-microsite: reencrypting to C7505C45A9CD6AD3 D4F57D4EE716C901
+corporate-credit-card: reencrypting to C7505C45A9CD6AD3 D4F57D4EE716C901
+
+[master 40f16d2] Reencrypt password store using new GPG id BD699A08, D83EB3C5.
+ 4 files changed, 0 insertions(+), 0 deletions(-)
+ rewrite ci-tool.gpg (100%)
+ rewrite corporate-credit-card.gpg (100%)
+ rewrite email/jngsp@test.com.gpg (100%)
+ rewrite heroku-for-microsite.gpg (100%)
+```
+
+새로운 gpg-id를 추가하려면 기존에 포함되어 있는 gpg-id도 포함하여 pass를 다시 설정해주는 과정이 필요합니다.
+위의 결과를 보면 기존에 저장되어 있던 비밀번호들이 새로운 공개 키를 이용해 다시 암호화 되는것을 확인 가능합니다.
+변경된 내용은 git repository를 업데이트하여 공유하면 됩니다.
+
+```
+$ pass git push
+```
+
+이런다음 이제 새 동료는 git repository를 받아준후 사용이 가능합니다.
 
 ### 서로 다른 보안 수준 반영하기
 
